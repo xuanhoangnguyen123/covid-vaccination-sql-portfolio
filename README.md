@@ -9,7 +9,7 @@ SQLite reporting project from RMIT University Database Concepts coursework. I de
 | [Cumulative doses](cumulative_doses.sql) | Join observations to location names and filter for sourced, non-null totals through 31 December 2021 | 34,406 |
 | [Daily coverage](daily_coverage.sql) | Group by date and use conditional aggregation to compare fully vaccinated people per hundred across six locations during 2021–2022 | 730 |
 
-The original global vaccination table contained 196,246 observations. The CSV examples in this repo use synthetic values. A missing location-date observation appears as a blank cell, representing SQL NULL.
+The original coursework database, [Vaccinations.db](Vaccinations.db), contains 196,246 observations in the global vaccination table. These are aggregate vaccination records. The database’s `Source` table records the source names and websites. A missing location-date observation appears as a blank cell in CSV output, representing SQL NULL.
 
 ## Schema
 
@@ -29,13 +29,11 @@ The original global vaccination table contained 196,246 observations. The CSV ex
 | LocationVaccine | GlobalLocation, Vaccine |
 | ObservationVaccine | GlobalVaccination, Vaccine |
 
-## Run the demo
+## Run the reports
 
-Run these commands from the repo root with the SQLite CLI installed.
+From the repository root, use the SQLite CLI to query the original database in read-only mode.
 
 ```sh
-cat schema.sql demo_data.sql cumulative_doses.sql | sqlite3 -cmd ".mode csv" -cmd ".headers on" :memory:
-cat schema.sql demo_data.sql daily_coverage.sql | sqlite3 -cmd ".mode csv" -cmd ".headers on" :memory:
+sqlite3 -readonly -cmd ".mode csv" -cmd ".headers on" Vaccinations.db < cumulative_doses.sql
+sqlite3 -readonly -cmd ".mode csv" -cmd ".headers on" Vaccinations.db < daily_coverage.sql
 ```
-
-Expected output is in [cumulative_doses_example.csv](cumulative_doses_example.csv) and [daily_coverage_example.csv](daily_coverage_example.csv).
